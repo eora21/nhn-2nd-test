@@ -1,6 +1,7 @@
 package com.nhnacademy.exam.parser.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.exam.domain.employee_department.model.normal.EmployeeDepartmentDto;
 import com.nhnacademy.exam.parser.DepartmentParser;
 import com.nhnacademy.exam.parser.DepartmentParserResolver;
 import com.nhnacademy.exam.parser.impl.CsvDepartmentParser;
@@ -17,7 +18,10 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -91,6 +95,19 @@ class DepartmentParserServiceTest {
                 Arguments.of("data/department.csv",10),
                 Arguments.of("data/department.json",10)
         );
+    }
+    
+    @Test
+    @DisplayName("dto 변환 애러 - String")
+    void stringToDtoError() throws Exception {
+        assertThrows(IllegalStateException.class, () -> EmployeeDepartmentDto.toDto(new String[]{"1", "2"}));
+    }
+
+    @Test
+    @DisplayName("dto 변환 애러 - Map")
+    void mapToDtoError() throws Exception {
+        Map<String, String> wrongMap = Map.of("이름", "부서");
+        assertThrows(IllegalStateException.class, () -> EmployeeDepartmentDto.toDto(wrongMap));
     }
 
 }

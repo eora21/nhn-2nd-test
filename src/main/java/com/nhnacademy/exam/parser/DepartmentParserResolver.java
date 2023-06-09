@@ -10,8 +10,11 @@ import java.util.List;
 public class DepartmentParserResolver {
     private final List<DepartmentParser> departmentParserList;
 
-    public DepartmentParser getDepartmentParser(String fileName){
-        return null;
+    public DepartmentParser getDepartmentParser(String fileName) {
+        return departmentParserList.stream()
+                .filter(departmentParser -> departmentParser.matchFileType(fileName))
+                .findAny()
+                .orElse(null);
     }
 
 }
